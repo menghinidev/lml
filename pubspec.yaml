@@ -1,0 +1,14 @@
+name: lml
+description: A collection of tools and wrappers to overcome or simpify common operations.
+version: 1.0.0
+publish_to: https://pub.dev/
+
+environment:
+  sdk: ">=2.14.2 <3.0.0"
+
+dependencies:
+  intl: ^0.17.0
+
+dev_dependencies:
+  lints: ^1.0.0
+  test: ^1.16.0
