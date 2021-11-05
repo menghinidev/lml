@@ -2,6 +2,8 @@ name: lml
 description: A collection of tools and wrappers to overcome or simpify common operations.
 version: 1.0.0
 publish_to: https://pub.dev/
+homepage: https://github.com/menghinidev/lml
+repository: https://github.com/menghinidev/lml
 
 environment:
   sdk: ">=2.14.2 <3.0.0"
