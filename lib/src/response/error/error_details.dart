@@ -1,16 +1,19 @@
 class ErrorDetails {
-  String message;
+  final int id;
+  final String message;
 
-  ErrorDetails(this.message);
+  ErrorDetails({required this.id, this.message = ''});
 
   factory ErrorDetails.fromJSON(Map<String, dynamic> object) {
     return ErrorDetails(
-      object['message'],
+      id: object['id'],
+      message: object['message'],
     );
   }
 
   @override
   String toString() {
-    return 'Error: $message';
+    return '''Error ID: $id
+    Error Message: $message''';
   }
 }
