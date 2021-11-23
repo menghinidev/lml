@@ -19,6 +19,7 @@ extension IterableBaseExtension<X> on Iterable<X> {
   }
 }
 
-extension InterableIdentifiersExtension<X extends Identifier> on Iterable<Identifier> {
+extension InterableIdentifiersExtension<X extends Identifier> on Iterable<X> {
   X? byId(int id) => (getWhere((element) => element.id == id) as X);
+  Iterable<X> intesectByIds(Set<int> ids) => where((element) => ids.contains(element.id));
 }

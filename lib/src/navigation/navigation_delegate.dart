@@ -62,7 +62,6 @@ class RootNavigationDelegate extends RouterDelegate<AppRoute>
 
   @override
   Future<void> setInitialRoutePath(AppRoute configuration) {
-    navigationBloc.add(NavigationInitialized(route: configuration));
     return Future.value();
   }
 }

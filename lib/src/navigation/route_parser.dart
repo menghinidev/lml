@@ -3,16 +3,16 @@ import 'package:lml/src/navigation/route.dart';
 import '../collections/iterable_utilities.dart';
 
 class AppRouteParser extends RouteInformationParser<AppRoute> {
-  final List<AppRoute> supportedRoutes;
-  final AppRoute defaultAppRoute;
+  final List<AppRouteFinalizer> supportedRoutes;
+  final AppRouteFinalizer defaultAppRoute;
 
   AppRouteParser({required this.supportedRoutes, required this.defaultAppRoute});
 
   @override
   Future<AppRoute> parseRouteInformation(RouteInformation routeInformation) {
     var uri = Uri.tryParse(routeInformation.location ?? '') ?? Uri(path: '');
-    var route = supportedRoutes.getWhere((element) => element.path == uri.path) ?? defaultAppRoute;
-    return Future.value(route);
+    var route = supportedRoutes.getWhere((element) => element.hasMatch(uri)) ?? defaultAppRoute;
+    return Future.value(route.generateRoute(uri.queryParameters));
   }
 
   @override

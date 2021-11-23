@@ -2,12 +2,6 @@ import 'package:lml/src/navigation/route.dart';
 
 abstract class NavigationEvent {}
 
-class NavigationInitialized extends NavigationEvent {
-  final AppRoute route;
-
-  NavigationInitialized({required this.route});
-}
-
 class PagePushed extends NavigationEvent {
   final AppRoute route;
 

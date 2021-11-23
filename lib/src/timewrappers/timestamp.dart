@@ -17,11 +17,18 @@ class TimeStamp with TimeWrapper {
       );
 
   factory TimeStamp.now() => TimeStamp(value: DateTime.now().toUtc());
-  @override
-  String format({DateFormat? formatter}) => DateFormat.yMd().add_jm().format(value.toLocal());
 
   @override
-  DateTime toDateTime({TimeStamp? filler}) => DateTime.parse(value.toIso8601String());
+  String format({DateFormat? formatter}) {
+    var form = formatter ?? DateFormat.yMd().add_jm();
+    var utcTime = value.toUtc();
+    var utcTimeString = form.format(utcTime);
+    var localTimeString = form.parse(utcTimeString, true).toLocal().toString();
+    return form.format(DateTime.parse(localTimeString));
+  }
+
+  @override
+  DateTime toDateTime({TimeStamp? filler}) => DateTime.parse(format());
 
   @override
   TimeWrapper increase(Duration value) => TimeStamp(value: this.value.add(value));

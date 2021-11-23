@@ -11,7 +11,7 @@ class Responses {
   }) {
     var payload = builder();
     if (isError(payload)) {
-      return Responses.failure([error ?? ErrorDetails('')]);
+      return Responses.failure([error ?? ErrorDetails(id: 0, message: '')]);
     }
     return Responses.success<T>(payload!);
   }
@@ -23,7 +23,7 @@ class Responses {
   }) async {
     var payload = await builder();
     if (isError(payload)) {
-      return Responses.failure([error ?? ErrorDetails('')]);
+      return Responses.failure([error ?? ErrorDetails(id: 0, message: '')]);
     }
     return Responses.success<T>(payload);
   }

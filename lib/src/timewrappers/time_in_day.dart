@@ -44,7 +44,8 @@ class TimeInDay with TimeWrapper {
   }
 
   @override
-  DateTime toDateTime({TimeStamp? filler, bool keepLocal = false}) => DateTime.parse(format());
+  DateTime toDateTime({TimeStamp? filler, bool keepLocal = false}) =>
+      DateTime.parse(format(formatter: DateFormat('yyyy-MM-dd HH:mm:ss.SSSSSS')));
 
   @override
   TimeWrapper increase(Duration value) => TimeInDay.fromDateTime(toDateTime().add(value), keepLocal: _local);

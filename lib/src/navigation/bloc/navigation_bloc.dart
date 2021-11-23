@@ -9,16 +9,11 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
   final navigatorKey = GlobalKey<NavigatorState>();
 
   NavigationBloc() : super(NavigationInitialState()) {
-    on<NavigationInitialized>((event, emit) => _handleNavigationInitialized(event.route, emit));
     on<PagePopped>((event, emit) => _handlePagePopped(emit));
     on<PagePoppedUntilRoute>((event, emit) => _handlePagePoppedUntilRoute(event, emit));
     on<PagePushed>((event, emit) => _handlePagePushed(event, emit));
     on<PagePushedAsFirst>((event, emit) => _handlePagePushedAsFirst(event, emit));
     on<ExternalPageRequestReceived>((event, emit) => _handleExternalPageRequested(event, emit));
-  }
-
-  Future _handleNavigationInitialized(AppRoute route, Emitter<NavigationState> emitter) async {
-    return Future.value();
   }
 
   Future _handlePagePopped(Emitter<NavigationState> emitter) async {

@@ -1,5 +1,5 @@
 class PaginationRequest {
-  static const int max_page_size = 30;
+  static const int maxPageSize = 30;
 
   final int pageSize;
   final int pageIndex;

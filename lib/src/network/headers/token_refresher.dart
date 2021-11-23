@@ -43,7 +43,7 @@ class BearerTokenRefresher with CrudNetworkDelegate implements ITokenRefresher<R
     var accessInfo = await accessInfoRetriever();
     var refreshResponse = await TokenRefreshLocker.instance.refresh(
       execute: () async {
-        if (accessInfo.isError) NetworkResponse.errorResponse([ErrorDetails('Refresh Token invalid')]);
+        if (accessInfo.isError) NetworkResponse.errorResponse([ErrorDetails(id: 1, message: 'Refresh Token invalid')]);
         var request = RefreshTokenRequestDto(
           accessToken: accessInfo.payload![accessTokenKey] ?? '',
           refreshToken: accessInfo.payload![refreshTokenKey] ?? '',

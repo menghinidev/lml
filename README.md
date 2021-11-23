@@ -11,26 +11,38 @@ and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/developing-packages).
 -->
 
-TODO: Put a short description of the package here that helps potential users
-know whether this package might be useful for them.
-
 ## Features
 
 ### TimeWrapper
 
+<p>
 Some classes that helps developers to manage the DateTime class wrapping it with common "time usage" as:
+</p>
+<ul>
+  <li>Date</li>
+  <li>Time In Day</li>
+  <li>Timestamp</li>
+  <li>Intervals<ul></li>
+  <li>Date Interval</li>
+  <li>Time In Day Interval</li>
+  <li>Timestamp Interval</li></ul>
+</ul>
 
-- Date
-- Time In Day
-- Timestamp
-- Intervals
-  - Date Interval
-  - Time In Day Interval
-  - Timestamp Interval
-
-And more..
+<p>And more..<br><br>
+It uses also the [Intl package](https://pub.dev/packages/intl) to support formatting using the correct format depending on device settings
+</p>
 
 It uses also the [Intl package](https://pub.dev/packages/intl) to support formatting using the correct format depending on device settings
+
+### BasicNavigation
+
+A complete app navigation library that uses BLoC pattern to update its Navigation widget
+
+```dart
+import 'package:lml/navigation.dart';
+```
+
+It's all you need, just create at the root of your app a Router and pass Roo
 
 ## Getting started
 
