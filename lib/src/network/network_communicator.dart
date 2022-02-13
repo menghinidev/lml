@@ -1,8 +1,8 @@
-import 'package:lml/src/logger/logger.dart';
+import 'package:lml/src/utils/logger/logger.dart';
 import 'package:lml/src/network/crud_network_delegate.dart';
 import 'package:lml/src/network/headers/request_header.dart';
 import 'package:lml/src/network/headers/token_refresher.dart';
-import 'package:lml/src/response/error/error_details.dart';
+import 'package:lml/src/utils/error/error_details.dart';
 import 'network_request.dart';
 import 'network_response.dart';
 

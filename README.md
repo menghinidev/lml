@@ -27,8 +27,7 @@ Some classes that helps developers to manage the DateTime class wrapping it with
   <li>Time In Day Interval</li>
   <li>Timestamp Interval</li></ul>
 </ul>
-
-<p>And more..<br><br>
+<br><br>
 It uses also the [Intl package](https://pub.dev/packages/intl) to support formatting using the correct format depending on device settings
 </p>
 
@@ -42,7 +41,21 @@ A complete app navigation library that uses BLoC pattern to update its Navigatio
 import 'package:lml/navigation.dart';
 ```
 
-It's all you need, just create at the root of your app a Router and pass Roo
+It's all you need, just create at the root of your app a MaterialApp.router() and provide it a RootNavigationDelegate and AppRouteParser with the supported routes for your application
+
+### Utils
+
+<p> Some classes i found useful to have in some context (identifiers, cachevalues, responses, more..) </p>
+
+### Network
+
+<p> Doc coming soon, just import
+
+```dart
+import 'package:lml/network.dart';
+```
+
+to access CRUD network delegates and more utilities object (Pagination, NetworkResponse, more..) </p>
 
 ## Getting started
 
@@ -50,7 +63,7 @@ Import the package using the standard import (checkout the "version" tab for mor
 
 ```yaml
 dependencies:
-  lml: ^1.0.0
+  lml: ^1.0.2
 ```
 
 ## Additional information

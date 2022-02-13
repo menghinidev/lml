@@ -20,7 +20,7 @@ class NavigationBloc extends Bloc<NavigationEvent, NavigationState> {
     var actualState = state;
     if (actualState is NavigationSnapshot) {
       var routes = actualState.routes;
-      if (routes.length == 1) return;
+      if (routes.length == 1) return Future.value();
       var newRoutes = routes..removeLast();
       emitter.call(NavigationSnapshot(routes: newRoutes));
     }

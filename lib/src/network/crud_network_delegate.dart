@@ -3,7 +3,7 @@ import 'package:lml/src/network/network_request.dart';
 import 'package:lml/src/network/network_response.dart';
 import 'package:http/http.dart' as http;
 import 'package:lml/src/network/pagination.dart';
-import 'package:lml/src/response/error/error_details.dart';
+import 'package:lml/src/utils/error/error_details.dart';
 
 mixin CrudNetworkDelegate {
   static final String errors = 'errors';
@@ -85,11 +85,8 @@ mixin CrudNetworkDelegate {
     return mappedJson.keys.every((element) => element == data || element == meta || element == errors);
   }
 
-  List<ErrorDetails> _parseEasyDeskErrors(List<dynamic> json) => json
-      .map<ErrorDetails>(
-        (e) => ErrorDetails.fromJSON(e),
-      )
-      .toList();
+  List<ErrorDetails> _parseEasyDeskErrors(List<dynamic> json) =>
+      json.map<ErrorDetails>((e) => ErrorDetails.fromJSON(e)).toList();
 
   ErrorDetails _parseHttpError(http.Response response) {
     switch (response.statusCode) {

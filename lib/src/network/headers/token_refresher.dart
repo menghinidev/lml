@@ -4,9 +4,9 @@ import 'package:lml/src/network/crud_network_delegate.dart';
 import 'package:lml/src/network/headers/request_header.dart';
 import 'package:lml/src/network/network_request.dart';
 import 'package:lml/src/network/network_response.dart';
-import 'package:lml/src/response/error/error_details.dart';
-import 'package:lml/src/response/response.dart';
-import 'package:lml/src/timewrappers/timestamp.dart';
+import 'package:lml/src/utils/error/error_details.dart';
+import 'package:lml/src/utils/response.dart';
+import 'package:lml/src/utils/timewrappers/timestamp.dart';
 
 const String tokenExpirationKey = 'expiration';
 const String accessTokenKey = 'accessToken';

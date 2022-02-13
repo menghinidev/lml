@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:lml/src/navigation/route.dart';
-import '../collections/iterable_utilities.dart';
+import 'package:lml/src/utils/extensions/list_extensions.dart';
 
 class AppRouteParser extends RouteInformationParser<AppRoute> {
   final List<AppRouteFinalizer> supportedRoutes;

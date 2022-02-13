@@ -1,8 +1,31 @@
+import 'extensions/list_extensions.dart';
 import 'error/error_details.dart';
 
 class Responses {
   static Response<T> success<T>(T? payload) => _Success(payload: payload);
   static Response<T> failure<T>(List<ErrorDetails> errors) => _Failure(errors: errors);
+
+  static Response<List<T>> createFrom<T, X>(
+    Iterable<X> source,
+    Response<T> Function(X source) mapper,
+  ) {
+    var response = Responses.success<List<T>>([]);
+    for (var id in source) {
+      response = response.flatMap((tab) => mapper(id).map((t) => tab!.appendInPlace(t!)));
+    }
+    return response;
+  }
+
+  static Future<Response<List<T>>> createFromAsync<T, X>(
+    Iterable<X> source,
+    Future<Response<T>> Function(X source) mapper,
+  ) async {
+    var response = Responses.success<List<T>>([]);
+    for (var id in source) {
+      response = await response.flatMapAsync((tab) => mapper(id).mapToResponse((t) => tab!.appendInPlace(t!)));
+    }
+    return response;
+  }
 
   static Response<T> create<T>({
     required T? Function() builder,
@@ -11,7 +34,7 @@ class Responses {
   }) {
     var payload = builder();
     if (isError(payload)) {
-      return Responses.failure([error ?? ErrorDetails(id: 0, message: '')]);
+      return Responses.failure([error ?? ErrorDetails(id: 0)]);
     }
     return Responses.success<T>(payload!);
   }
@@ -23,7 +46,7 @@ class Responses {
   }) async {
     var payload = await builder();
     if (isError(payload)) {
-      return Responses.failure([error ?? ErrorDetails(id: 0, message: '')]);
+      return Responses.failure([error ?? ErrorDetails(id: 0)]);
     }
     return Responses.success<T>(payload);
   }
@@ -34,6 +57,8 @@ abstract class Response<T> {
 
   T? get payload;
   List<ErrorDetails> get errors;
+
+  bool hasError(int code) => errors.getWhere((element) => element.id == code) != null;
 
   Response<B> map<B>(B Function(T? t) mapper);
 
@@ -47,9 +72,16 @@ abstract class Response<T> {
 
   Future<Response<T>> ifSuccessAsync(Future Function(T? payload) callback);
 
-  Response<T> ifError(Function(T? payload) callback);
+  Response<T> ifError(Function(T? payload) callback, {int? specificError});
 
-  Future<Response<T>> ifErrorAsync(Future Function(T? payload) callback);
+  Future<Response<T>> ifErrorAsync(Future Function(T? payload) callback, {int? specificError});
+
+  Response<List<B>> flatAndCollect<B, X>(Iterable<X> source, Response<B> Function(X source) mapper);
+
+  Future<Response<List<B>>> flatAndCollectAsync<B, X>(
+    Iterable<X> source,
+    Future<Response<B>> Function(X source) mapper,
+  );
 }
 
 class _Success<T> extends Response<T> {
@@ -88,10 +120,31 @@ class _Success<T> extends Response<T> {
   }
 
   @override
-  Response<T> ifError(Function(T? payload) callback) => this;
+  Response<T> ifError(Function(T? payload) callback, {int? specificError}) => this;
 
   @override
-  Future<Response<T>> ifErrorAsync(Future Function(T? payload) callback) => Future.value(this);
+  Future<Response<T>> ifErrorAsync(Future Function(T? payload) callback, {int? specificError}) => Future.value(this);
+
+  @override
+  Response<List<B>> flatAndCollect<B, X>(Iterable<X> source, Response<B> Function(X source) mapper) {
+    var response = Responses.success<List<B>>([]);
+    for (var id in source) {
+      response = response.flatMap((tab) => mapper(id).map((t) => tab!.appendInPlace(t!)));
+    }
+    return response;
+  }
+
+  @override
+  Future<Response<List<B>>> flatAndCollectAsync<B, X>(
+    Iterable<X> source,
+    Future<Response<B>> Function(X source) mapper,
+  ) async {
+    var response = Responses.success<List<B>>([]);
+    for (var id in source) {
+      response = await response.flatMapAsync((tab) => mapper(id).mapToResponse((t) => tab!.appendInPlace(t!)));
+    }
+    return response;
+  }
 }
 
 class _Failure<T> extends Response<T> {
@@ -125,16 +178,30 @@ class _Failure<T> extends Response<T> {
   Future<Response<T>> ifSuccessAsync(Future Function(T payload) callback) => Future.value(this);
 
   @override
-  Response<T> ifError(Function(T? payload) callback) {
-    callback(payload);
+  Response<T> ifError(Function(T? payload) callback, {int? specificError}) {
+    if (_triggerErrorCallback(specificError)) callback(payload);
+    return this;
+  }
+
+  bool _triggerErrorCallback(int? specificError) {
+    if (specificError == null) return true;
+    return super.hasError(specificError);
+  }
+
+  @override
+  Future<Response<T>> ifErrorAsync(Future Function(T? payload) callback, {int? specificError}) async {
+    if (_triggerErrorCallback(specificError)) await callback(payload);
     return this;
   }
 
   @override
-  Future<Response<T>> ifErrorAsync(Future Function(T? payload) callback) async {
-    await callback(payload);
-    return this;
-  }
+  Response<List<B>> flatAndCollect<B, X>(Iterable<X> source, Response<B> Function(X source) mapper) =>
+      _Failure(errors: errors);
+
+  @override
+  Future<Response<List<B>>> flatAndCollectAsync<B, X>(
+          Iterable<X> source, Future<Response<B>> Function(X source) mapper) =>
+      Future.value(_Failure(errors: errors));
 }
 
 class _Terminator<T> extends Response<T> {
@@ -153,10 +220,14 @@ class _Terminator<T> extends Response<T> {
       );
 
   @override
-  Response<T> ifError(Function(T payload) callback) => this;
+  Response<T> ifError(Function(T payload) callback, {int? specificError}) => this;
 
   @override
-  Future<Response<T>> ifErrorAsync(Future Function(T payload) callback) => Future.value(this);
+  Future<Response<T>> ifErrorAsync(
+    Future Function(T payload) callback, {
+    int? specificError,
+  }) =>
+      Future.value(this);
 
   @override
   Response<T> ifSuccess(Function(T payload) callback) => this;
@@ -172,36 +243,47 @@ class _Terminator<T> extends Response<T> {
 
   @override
   T get payload => response.payload;
+
+  @override
+  Response<List<B>> flatAndCollect<B, X>(Iterable<X> source, Response<B> Function(X source) mapper) =>
+      _Terminator<List<B>>(response: response);
+
+  @override
+  Future<Response<List<B>>> flatAndCollectAsync<B, X>(
+          Iterable<X> source, Future<Response<B>> Function(X source) mapper) =>
+      Future.value(_Terminator<List<B>>(response: response));
 }
 
 extension ResponseTerminator<T> on Response<T> {
-  Response<T> ifErrorTerminate() {
+  Response<T> ifErrorTerminate({int? code}) {
     if (!isError) return this;
-    return _Terminator<T>(response: this);
+    if (code == null) return _Terminator<T>(response: this);
+    if (hasError(code)) return _Terminator<T>(response: this);
+    return this;
   }
 
   Response<T> ifSuccessTerminate() => !isError ? _Terminator<T>(response: this) : this;
 }
 
-extension FutureExtension<B> on Future<Response<B>> {
+extension FutureResponseExtension<B> on Future<Response<B>> {
   Future<Response<T>> mapToResponse<T>(T Function(B? payload) mapper) async {
     var res = await this;
     return res.map(mapper);
   }
 
-  Future<Response<B>> ifError(Function(B? payload) callback) async {
+  Future<Response<B>> ifError(Function(B? payload) callback, {int? specificError}) async {
     var res = await this;
-    return res.ifError(callback);
+    return res.ifError(callback, specificError: specificError);
   }
 
-  Future<Response<B>> ifErrorTerminate(Function(B? payload) callback) async {
+  Future<Response<B>> ifErrorTerminate(Function(B? payload) callback, {int? specificError}) async {
     var res = await this;
-    return res.ifError(callback).ifErrorTerminate();
+    return res.ifError(callback, specificError: specificError).ifErrorTerminate(code: specificError);
   }
 
-  Future<Response<B>> ifErrorAsync(Future Function(B? payload) callback) async {
+  Future<Response<B>> ifErrorAsync(Future Function(B? payload) callback, {int? specificError}) async {
     var res = await this;
-    return res.ifErrorAsync(callback);
+    return res.ifErrorAsync(callback, specificError: specificError);
   }
 
   Future<Response<B>> ifSuccess(Function(B? payload) callback) async {
@@ -232,5 +314,29 @@ extension FutureExtension<B> on Future<Response<B>> {
   Future<Response<T>> flatMapAsyncToResponse<T>(Future<Response<T>> Function(B? payload) mapper) async {
     var res = await this;
     return await res.flatMapAsync(mapper);
+  }
+
+  Future<Response<List<T>>> flatAndCollect<T, X>(
+    Iterable<X> source,
+    Response<T> Function(X source) mapper,
+  ) async {
+    var res = await this;
+    if (res.isError) return Responses.failure<List<T>>(res.errors);
+    var response = Responses.success<List<T>>([]);
+    for (var id in source) {
+      response = response.flatMap((tab) => mapper(id).map((t) => tab!.appendInPlace(t!)));
+    }
+    return response;
+  }
+
+  Future<Response<List<T>>> flatAndCollectAsync<T, X>(
+    Iterable<X> source,
+    Future<Response<T>> Function(X source) mapper,
+  ) async {
+    var response = Responses.success<List<T>>([]);
+    for (var id in source) {
+      response = await response.flatMapAsync((tab) => mapper(id).mapToResponse((t) => tab!.appendInPlace(t!)));
+    }
+    return response;
   }
 }

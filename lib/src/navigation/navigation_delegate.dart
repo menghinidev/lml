@@ -62,6 +62,6 @@ class RootNavigationDelegate extends RouterDelegate<AppRoute>
 
   @override
   Future<void> setInitialRoutePath(AppRoute configuration) {
-    return Future.value();
+    return super.setInitialRoutePath(configuration);
   }
 }

@@ -1,5 +1,5 @@
-import 'package:intl/intl.dart';
 import 'timestamp.dart';
+import 'package:intl/intl.dart';
 
 abstract class TimeWrapper {
   DateTime toDateTime({TimeStamp? filler});
@@ -22,4 +22,13 @@ abstract class TimeWrapper {
   String format({DateFormat? formatter});
   TimeWrapper increase(Duration value);
   TimeWrapper decrease(Duration value);
+}
+
+abstract class IntervalWrapper<T extends TimeWrapper> {
+  bool contains(T wrapper);
+  T get start;
+  T get end;
+  Duration difference();
+  bool cross(IntervalWrapper wrapper);
+  String format();
 }

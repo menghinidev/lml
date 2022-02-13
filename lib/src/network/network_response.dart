@@ -1,6 +1,6 @@
 import 'package:lml/src/network/pagination.dart';
-import 'package:lml/src/response/error/error_details.dart';
-import 'package:lml/src/response/response.dart';
+import 'package:lml/src/utils/error/error_details.dart';
+import 'package:lml/src/utils/response.dart';
 
 class NetworkResponse<T> {
   T? payload;

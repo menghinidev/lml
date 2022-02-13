@@ -1,8 +1,7 @@
-import 'package:lml/src/timewrappers/intervals/time_in_day_interval.dart';
-import 'package:lml/src/timewrappers/intervals/time_interval_wrapper.dart';
-import 'package:lml/src/timewrappers/time_in_day.dart';
-import 'package:lml/src/timewrappers/time_wrapper.dart';
-import 'package:lml/src/timewrappers/timestamp.dart';
+import 'time.dart';
+import 'time_interval.dart';
+import 'interval.dart';
+import 'timestamp.dart';
 
 class TimeStampInterval extends IntervalWrapper<TimeStamp> {
   @override
@@ -28,10 +27,7 @@ class TimeStampInterval extends IntervalWrapper<TimeStamp> {
   Duration difference() => end.difference(start);
 
   @override
-  String format() => TimeInDayInterval(
-        start: TimeInDay.fromDateTime(start.value),
-        end: TimeInDay.fromDateTime(end.value),
-      ).format();
+  String format() => TimeInterval(start: Time.fromDateTime(start.value), end: Time.fromDateTime(end.value)).format();
 
   TimeStampInterval copyWith({TimeStamp? newStart, TimeStamp? newEnd}) => TimeStampInterval(
         start: newStart ?? start,

@@ -1,5 +1,3 @@
-import 'package:lml/src/identifier/identifier.dart';
-
 extension ListExtension<X> on List<X> {
   List<X> appendInPlace(X value) {
     insert(length, value);
@@ -17,9 +15,4 @@ extension IterableBaseExtension<X> on Iterable<X> {
     }
     return value;
   }
-}
-
-extension InterableIdentifiersExtension<X extends Identifier> on Iterable<X> {
-  X? byId(int id) => (getWhere((element) => element.id == id) as X);
-  Iterable<X> intesectByIds(Set<int> ids) => where((element) => ids.contains(element.id));
 }

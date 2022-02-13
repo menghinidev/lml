@@ -6,7 +6,12 @@ class Tree<T> {
   Tree({required this.value, this.parent}) : children = [];
 
   static List<Tree<T>> fromFlat<T>(List<T> flatItems, int? Function(T node) parentKey, int Function(T node) getKey) {
-    var _lookUp = {for (var object in flatItems) getKey(object): Tree(value: object)};
+    // ignore: prefer_for_elements_to_map_fromiterable
+    var _lookUp = Map<int, Tree<T>>.fromIterable(
+      flatItems,
+      key: (object) => getKey(object),
+      value: (object) => Tree(value: object),
+    );
     return _generateTree<T>(_lookUp, parentKey, getKey, flatItems);
   }
 

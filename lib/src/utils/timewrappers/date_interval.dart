@@ -1,6 +1,5 @@
-import 'package:lml/src/timewrappers/date.dart';
-import 'package:lml/src/timewrappers/time_wrapper.dart';
-import 'time_interval_wrapper.dart';
+import 'date.dart';
+import 'interval.dart';
 
 class DateInterval with IntervalWrapper<Date> {
   @override
@@ -31,7 +30,7 @@ class DateInterval with IntervalWrapper<Date> {
   }
 
   @override
-  String format() => start.format() + ' / ' + end.format();
+  String format() => start.format() + ' - ' + end.format();
 
   Date operator [](int index) => start.increase(Duration(days: index)) as Date;
 

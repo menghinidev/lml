@@ -1,10 +1,10 @@
-import 'package:intl/intl.dart';
-import 'time_wrapper.dart';
+import 'date_interval.dart';
+import 'interval.dart';
 import 'timestamp.dart';
-import 'intervals/date_interval.dart';
-import 'weekday.dart';
+import 'package:intl/intl.dart';
+import 'week_day.dart';
 
-class Date with TimeWrapper {
+class Date extends TimeWrapper {
   final int year;
   final int month;
   final int day;
@@ -51,7 +51,9 @@ class Date with TimeWrapper {
 
   @override
   TimeWrapper decrease(Duration value) => Date.fromDateTime(toDateTime().subtract(value));
+}
 
+extension DateProperties on Date {
   WeekDay get weekDay => WeekDay.values[toDateTime().toUtc().weekday - 1];
   bool get isToday => DateTime.now().toUtc().day == day;
   bool areInTheSameDay(Date date) => date.compareTo(this) == 0;

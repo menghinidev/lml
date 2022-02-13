@@ -1,9 +1,9 @@
-import 'package:intl/intl.dart';
-import 'time_in_day.dart';
 import 'date.dart';
-import 'time_wrapper.dart';
+import 'interval.dart';
+import 'time.dart';
+import 'package:intl/intl.dart';
 
-class TimeStamp with TimeWrapper {
+class TimeStamp extends TimeWrapper {
   final DateTime value;
 
   TimeStamp({required this.value});
@@ -12,23 +12,21 @@ class TimeStamp with TimeWrapper {
 
   static TimeStamp? tryParse(String? value) => value != null ? TimeStamp.fromString(value) : null;
 
-  factory TimeStamp.fromDateAndTime(Date date, TimeInDay time) => TimeStamp(
+  factory TimeStamp.fromDateAndTime(Date date, Time time) => TimeStamp(
         value: time.toDateTime(filler: TimeStamp(value: date.toDateTime())),
       );
 
   factory TimeStamp.now() => TimeStamp(value: DateTime.now().toUtc());
 
-  @override
-  String format({DateFormat? formatter}) {
-    var form = formatter ?? DateFormat.yMd().add_jm();
-    var utcTime = value.toUtc();
-    var utcTimeString = form.format(utcTime);
-    var localTimeString = form.parse(utcTimeString, true).toLocal().toString();
-    return form.format(DateTime.parse(localTimeString));
-  }
+  Time get time => Time.fromDateTime(value);
+
+  Date get day => Date.fromDateTime(value);
 
   @override
-  DateTime toDateTime({TimeStamp? filler}) => DateTime.parse(format());
+  String format({DateFormat? formatter, TimeStamp? filler}) => DateFormat.yMd().add_jm().format(value.toLocal());
+
+  @override
+  DateTime toDateTime({TimeStamp? filler}) => DateTime.parse(value.toIso8601String());
 
   @override
   TimeWrapper increase(Duration value) => TimeStamp(value: this.value.add(value));
