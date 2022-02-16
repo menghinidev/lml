@@ -1,7 +1,6 @@
 name: lml
 description: A collection of tools and wrappers to overcome or simpify common operations.
-version: 1.0.2
-publish_to: https://pub.dev/
+version: 1.0.3
 homepage: https://github.com/menghinidev/lml
 repository: https://github.com/menghinidev/lml
 
@@ -14,7 +13,6 @@ dependencies:
   intl: ^0.17.0
   flutter_bloc: ^8.0.0
   http: ^0.13.4
-  cached_network_image: ^3.1.0
 
 dev_dependencies:
   lints: ^1.0.0
