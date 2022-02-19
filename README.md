@@ -11,53 +11,25 @@ and the Flutter guide for
 [developing packages and plugins](https://flutter.dev/developing-packages).
 -->
 
-## Features
+# What is LML
 
-### TimeWrapper
+<p>LML is a collection of usefull tools that can help you build your Dart module/Flutter application</p>
 
 <p>
-Some classes that helps developers to manage the DateTime class wrapping it with common "time usage" as:
-</p>
+It is divided in these 4 categories:
 <ul>
-  <li>Date</li>
-  <li>Time In Day</li>
-  <li>Timestamp</li>
-  <li>Intervals<ul></li>
-  <li>Date Interval</li>
-  <li>Time In Day Interval</li>
-  <li>Timestamp Interval</li></ul>
+  <li>Network</li>
+  <li>Navigation</li>
+  <li>StateManagement</li>
+  <li>Utils</li>
 </ul>
-<br><br>
-It uses also the [Intl package](https://pub.dev/packages/intl) to support formatting using the correct format depending on device settings
+
+For each of these modules there are multiple common problem solutions and prebuilt tools as a <b>HTTPnetworkCommunicator</b> handling custom NetworkRequets and Responses.
+
 </p>
+<br>
 
-It uses also the [Intl package](https://pub.dev/packages/intl) to support formatting using the correct format depending on device settings
-
-### BasicNavigation
-
-A complete app navigation library that uses BLoC pattern to update its Navigation widget
-
-```dart
-import 'package:lml/navigation.dart';
-```
-
-It's all you need, just create at the root of your app a MaterialApp.router() and provide it a RootNavigationDelegate and AppRouteParser with the supported routes for your application
-
-### Utils
-
-<p> Some classes i found useful to have in some context (identifiers, cachevalues, responses, more..) </p>
-
-### Network
-
-<p> Doc coming soon, just import
-
-```dart
-import 'package:lml/network.dart';
-```
-
-to access CRUD network delegates and more utilities object (Pagination, NetworkResponse, more..) </p>
-
-## Getting started
+# Getting started
 
 Import the package using the standard import (checkout the "version" tab for more)
 
@@ -66,6 +38,104 @@ dependencies:
   lml: ^1.0.2
 ```
 
-## Additional information
+<br>
+
+# LML Modules
+
+## Network
+
+```dart
+import 'package:lml/network.dart';
+```
+
+<p>
+Import this module to use the prebuilt HTTP communicator with these customizable features:
+</p>
+<ul>
+<li>CRUD Network Delegate</li>
+Mixin doing basic HTTP requests
+<li>Network Communicator</li>
+Uses <b>CrudNetworkDelegate</b> to make HTTP requests defined by <b>Network Request</b> and </b>Network Response</b> classes.
+<li>Network Request</li>
+<li>Network Response</li>
+<li>Pagination</li>
+<li>Header generation</li>
+<li>Token refreshing</li>
+</ul>
+
+## Utilities
+
+```dart
+import 'package:lml/utils.dart';
+```
+
+### TimeWrapper
+
+<p>
+Some classes that helps developers to manage the DateTime class wrapping it with common "time usage" as:
+</p>
+<ul>
+  <li>Date</li>
+  <li>TimeInDay</li>
+  <li>Timestamp</li>
+  <li>Intervals<ul></li>
+  <li>DateInterval</li>
+  <li>TimeInDay Interval</li>
+  <li>Timestamp Interval</li></ul>
+</ul>
+
+It uses also the [Intl package](https://pub.dev/packages/intl) to support formatting using the correct format depending on device settings
+
+## Navigation
+
+```dart
+import 'package:lml/navigation.dart';
+```
+
+<p>
+
+A complete app navigation library that uses [BLoC libary](https://pub.dev/packages/flutter_bloc) to update its Navigation widget
+
+</p>
+
+It's all you need, just create at the root of your app a MaterialApp.router() and provide it a RootNavigationDelegate and AppRouteParser with the supported routes for your application
+
+<br>
+
+## State Management
+
+```dart
+import 'package:lml/bloc.dart';
+```
+
+<p>
+
+Using the [BLoC libary](https://pub.dev/packages/flutter_bloc) will require some extra code to get it work properly on your application.<br>
+For example mapping each [BlocState] to its widget rapresentation or listening to a particular state change.<br>
+The LML <b>Bloc module</b> has some tools to help you with this task.
+
+</p>
+
+### BlocStateBuilder
+
+Doc coming soom, please check the class definition for more information
+
+### BlocStateListener
+
+Doc coming soom, please check the class definition for more information
+
+### ErrorBlocManager
+
+Doc coming soom, please check the class definition for more information
+
+### ErrorManagerListener
+
+Doc coming soom, please check the class definition for more information
+
+### Utilities
+
+Doc coming soom, please check the class definition for more information
+
+# Additional information
 
 Leave a issue if something is wrong or wants improvements on something, i will take it into account

@@ -4,6 +4,12 @@ import 'package:lml/src/bloc/events.dart';
 import 'package:lml/src/bloc/states.dart';
 import 'bloc_state_builder_binder.dart';
 
+///
+/// A [Widget] that depending on [T] bloc state renders a different [BlocStateBuilderBinder] builder.
+///
+/// If the [bloc] parameter is omitted, [BlocStateBuilder] will automatically perform a lookup using [BlocProvider] and the current [BuildContext].
+///
+
 class BlocStateBuilder<T extends Bloc<BlocEvent, BlocState>> extends BlocBuilder<T, BlocState> {
   BlocStateBuilder({required List<BlocStateBuilderBinder> stateBinders, T? bloc})
       : super(

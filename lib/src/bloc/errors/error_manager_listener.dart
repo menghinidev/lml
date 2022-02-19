@@ -6,6 +6,10 @@ import 'package:lml/src/bloc/listeners/bloc_state_listener.dart';
 import 'package:lml/src/bloc/listeners/bloc_state_listener_binder.dart';
 import 'package:lml/src/bloc/utils.dart';
 
+///
+/// A [Widget] that listen for [ErrorManagerBloc] state changes and reacts triggering the [errorHandler] callback
+///
+
 class ErrorBlocListener<T> extends StatelessWidget with BlocRequester<ErrorManagerBloc> {
   final Widget child;
   final Future<T> Function(BuildContext context, ErrorProcessing state) errorHandler;

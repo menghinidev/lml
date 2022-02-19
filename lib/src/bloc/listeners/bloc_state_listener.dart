@@ -4,6 +4,12 @@ import 'package:lml/src/bloc/events.dart';
 import 'package:lml/src/bloc/listeners/bloc_state_listener_binder.dart';
 import 'package:lml/src/bloc/states.dart';
 
+///
+/// A [Widget] that depending on [T] bloc state calls a different [BlocStateListenerBinder] trigger.
+///
+/// If the [bloc] parameter is omitted, [BlocStateListener] will automatically perform a lookup using [BlocProvider] and the current [BuildContext].
+///
+
 class BlocStateListener<T extends Bloc<BlocEvent, BlocState>> extends BlocListener<T, BlocState> {
   BlocStateListener({required List<BlocStateListenerBinder> stateBinders, Widget? child, T? bloc})
       : super(
@@ -17,6 +23,10 @@ class BlocStateListener<T extends Bloc<BlocEvent, BlocState>> extends BlocListen
           },
         );
 }
+
+///
+/// A [Widget] that accepts muliple [BlocStateListener]
+///
 
 class MultiBlocStateListener extends StatelessWidget {
   final List<BlocStateListener> listeners;

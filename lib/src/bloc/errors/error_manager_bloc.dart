@@ -28,6 +28,13 @@ class ErrorProcessing extends BlocState {
 
 class NoErrors extends BlocState {}
 
+///
+/// A basic [Bloc] that can receive these events
+///
+/// * [GeneralErrorRaised]
+/// * [APIErrorRaised] (a more detailed error that uses [ErrorDetails] class)
+///
+
 class ErrorManagerBloc extends Bloc<BlocEvent, BlocState> {
   ErrorManagerBloc() : super(NoErrors()) {
     on<APIErrorRaised>((event, emit) => _handleErrorRaised(event, emit));

@@ -9,35 +9,32 @@ import 'bloc/navigator_events.dart';
 import 'bloc/navigator_states.dart';
 
 ///
-/// A basic implementation of [RouterDelegate] that supports [NavigationBloc] state stream and updates the [Navigator] wigdget properly
+/// A basic implementation of [RouterDelegate] that listen to [NavigatorBloc] state stream and updates the [Navigator] wigdget properly.
 ///
 
 class NavigatorDelegate extends RouterDelegate<AppRoute>
     with ChangeNotifier, PopNavigatorRouterDelegateMixin<AppRoute> {
-  final NavigatorBloc navigationBloc;
+  final NavigatorBloc navigatorBloc;
 
-  ///
-  /// * [navigationBloc] is the referring [NavigationBloc] instance
-  ///
-  NavigatorDelegate({required this.navigationBloc}) {
-    navigationBloc.stream.listen((event) => notifyListeners());
+  NavigatorDelegate({required this.navigatorBloc}) {
+    navigatorBloc.stream.listen((event) => notifyListeners());
   }
 
   @override
   AppRoute? get currentConfiguration {
-    var navState = navigationBloc.state;
+    var navState = navigatorBloc.state;
     if (navState is InitialBlocState) return null;
     if (navState is NavigatorLoadSuccess && navState.routes.isNotEmpty) return navState.routes.last;
     return null;
   }
 
   @override
-  GlobalKey<NavigatorState> get navigatorKey => navigationBloc.navigatorKey;
+  GlobalKey<NavigatorState> get navigatorKey => navigatorBloc.navigatorKey;
 
   @override
   Widget build(BuildContext context) {
     return BlocStateBuilder<NavigatorBloc>(
-      bloc: navigationBloc,
+      bloc: navigatorBloc,
       stateBinders: [
         BlocStateBuilderBinder<NavigatorLoadSuccess>(
           builder: (context, state) => Navigator(
@@ -45,7 +42,7 @@ class NavigatorDelegate extends RouterDelegate<AppRoute>
             pages: List<Page<dynamic>>.unmodifiable(state.pages),
             onPopPage: (route, result) {
               if (route.didPop(result)) return false;
-              navigationBloc.add(PagePopped());
+              navigatorBloc.add(PagePopped());
               return true;
             },
           ),
@@ -56,13 +53,13 @@ class NavigatorDelegate extends RouterDelegate<AppRoute>
 
   @override
   Future<void> setNewRoutePath(AppRoute configuration) {
-    navigationBloc.add(ExternalPageRequestReceived(route: configuration));
+    navigatorBloc.add(ExternalPageRequestReceived(route: configuration));
     return Future.value();
   }
 
   @override
   Future<void> setInitialRoutePath(AppRoute configuration) {
-    navigationBloc.add(InitialPagePushed(route: configuration));
+    navigatorBloc.add(InitialPagePushed(route: configuration));
     return Future.value();
   }
 }
