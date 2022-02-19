@@ -1,10 +1,10 @@
 import 'dart:async';
 
 import 'package:flutter/material.dart';
-import 'package:flutter/src/widgets/navigator.dart';
-import 'package:lml/navigation.dart';
 import 'package:lml/src/navigation/bloc/navigator_bloc.dart';
 import 'package:lml/src/navigation/bloc/navigator_events.dart';
+import 'package:lml/src/navigation/bloc/navigator_states.dart';
+import 'package:lml/src/navigation/route.dart';
 import 'package:test/test.dart';
 
 class FirstAppRoute extends AppRoute {
